@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'accounts/style.css'%}" type = "text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -42,7 +43,7 @@
         <a class="nav-link" href="https://readms.net/r/attack_on_titan/115/5732/25">Find</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="http://google.com">Login</a>
+        <a class="nav-link" href="http://google.com" target = "_blank">Login</a>
       </li>
       </form>
     </ul>
@@ -54,46 +55,15 @@
 <!--  -->
 <div class="container" style="margin-top:8px">
   <div class="row">
-    <div class="col-sm-12 text-center">
+    <div class="col-sm-4 text-center">
       <h2>About Me</h2>
       <h5>Photo of me:</h5>
       <div class="container">
     <img src="https://cdn.thewirecutter.com/wp-content/uploads/2018/03/boardgamesforadults-2x1-7452.jpg" alt="Italian Trulli" class= "img-fluid">
-    <button class="btn danger">Button</button>
-    .container {
-  position: relative;
-  width: 50%;
-}
-
-/* Make the image responsive */
-.container img {
-  width: 100%;
-  height: auto;
-}
-
-/* Style the button and place it in the middle of the container/image */
-.container .btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  background-color: #555;
-  color: white;
-  font-size: 16px;
-  padding: 12px 24px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.container .btn:hover {
-  background-color: black;
-}
   </div>
 <!--        <img src="https://cdn.thewirecutter.com/wp-content/uploads/2018/03/boardgamesforadults-2x1-7452.jpg" alt="Italian Trulli" class= "img-fluid">
 -->  </div>
-      <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+      <p>Board games are sick</p>
       <h3>Random Game</h3>
       <p>Feeling lucky? Click any of the links below to get back a random game from our database.</p>
       <ul class="nav nav-pills flex-column">
@@ -101,7 +71,7 @@
           <a class="nav-link active" href="#">Random Game 1</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Random Game 2</a>
+          <a class="nav-link " href="#">Random Game 2</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Random Game 3</a>
@@ -109,9 +79,9 @@
       </ul>
       <hr class="d-sm-none">
     </div>
-<!--    <div class ="col-sm-8">
+   <div class ="col-sm-8 text-center">
       <h2>foo</h2>
--->
+
   </div>
 </div>
 
