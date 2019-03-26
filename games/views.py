@@ -31,7 +31,7 @@ def get_game_sql(game_id):
         # user_rows = dictfetchall(cursor)
         # cursor.execute("SELECT * FROM Relation;")
         # relation_rows = dictfetchall(cursor)
-    return game_rows
+    return game_rows[0]
 
 def remove_accents(input_str):
     nfkd_form = unicodedata.normalize('NFKD', input_str)
@@ -44,6 +44,6 @@ def index(request):
 
 def detail(request, game_id):
     game = get_game_sql(game_id)
-    if not game[0]:
+    if not game:
         raise Http404("Game does not exist")
-    return render(request, "Game/detail.html", {'game': game[0], 'user': request.user})
+    return render(request, "Game/detail.html", {'game': game, 'user': request.user})
