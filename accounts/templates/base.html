@@ -18,6 +18,10 @@
       {% endblock %}
   </head>
   <body>
+    <main>
+      {% block content %}
+        {% endblock %}
+    </main>
 
     <!-- Jumbotron at the head of the page -->
     <div class="jumbotron text-center" style="margin-bottom:0">
@@ -42,10 +46,15 @@
             <a class="nav-link" href="https://readms.net/r/attack_on_titan/115/5732/25" target = "_blank">Find</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="http://127.0.0.1:8000/accounts/login/" >Login</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="#" >About</a>
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+              Hi {{ user.username }}!
+              <p><a href="{% url 'logout' %}">logout</a></p>
+            {% else %}
+            <!--  <p>You are not logged in</p> -->
+              <a class = "nav-link" href="{% url 'login' %}">Login</a>
+            {% endif %}
           </li>
           </form>
         </ul>
