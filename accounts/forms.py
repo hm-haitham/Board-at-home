@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import UserProfile
 
 class RegistrationForm(UserCreationForm):
@@ -28,6 +28,7 @@ class RegistrationForm(UserCreationForm):
 
         return user
 
+#Form for custom User Profile Table
 class UserProfileForm(forms.ModelForm):
 
     class Meta:
@@ -35,4 +36,17 @@ class UserProfileForm(forms.ModelForm):
         fields =(
         'city',
         'zipcode'
+        )
+
+
+#Form for Editing Django Base Profile info
+class EditProfileForm(UserChangeForm):
+
+    class Meta:
+        model = User
+        fields = (
+        "email",
+        "first_name",
+        "last_name",
+        "password",
         )

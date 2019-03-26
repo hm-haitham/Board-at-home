@@ -43,7 +43,7 @@
             <a class="nav-link" href="http://127.0.0.1:8000/accounts/search/">Search</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://readms.net/r/attack_on_titan/115/5732/25" target = "_blank">Find</a>
+            <a class="nav-link" href="https://readms.net/r/attack_on_titan/115/5732/25" target = "_blank">Games</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" >About</a>
@@ -58,7 +58,7 @@
           </li>
           <li class="nav-item">
             {% if user.is_authenticated %}
-            <a class="nav-link" href="http://127.0.0.1:8000/accounts/profile/" >Your Profile</a>
+            <a class="nav-link" href="{% url 'view_profile' %}" >Your Profile</a>
             {% endif %}
           </li>
           </form>
@@ -66,8 +66,13 @@
       </div>
     </nav>
 
+
+
       {% block body %}
       <h1> BASE </h1>
       {% endblock %}
 
+  <div class="jumbotron text-center" style="margin-bottom:0">
+    <h1>Board at home bottom jumbotron</h1>
+    </div>
 </body>
