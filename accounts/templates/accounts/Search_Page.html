@@ -3,19 +3,24 @@
 
 {% block body %}
 
-<div class="container">
+<div class="dropdown">
   <h1>Search Results</h1>
   <hr>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<form class="example" action="action_page.php">
-  <input type="text" placeholder="Search.." name="search">
-  <button type="submit"><i class="fa fa-search"></i></button>
-</form>
-
-<img src="https://logos.flamingtext.com/Word-Logos/result-design-sketch-name.png" alt="HTML5 Icon" width="128" height="128">
-
+    <datalist id="suggestions">
+        <option>2-4</option>
+        <option>5-10</option>
+        <option>10+</option>
+    </datalist>
+    <input  autoComplete="on" list="suggestions"/> 
+    <datalist id="suggestion">
+        <option>Adventure</option>
+        <option>Educational</option>
+        <option>Dice</option>
+        <option>Family</option>
+    </datalist>
+    <input  autoComplete="on" list="suggestion"/> 
 </div>
+
+
 
 {% endblock %}
