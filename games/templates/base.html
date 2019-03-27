@@ -43,7 +43,7 @@
             <a class="nav-link" href="https://soundcloud.com/indigo_elephant">Search</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="https://readms.net/r/attack_on_titan/115/5732/25" target = "_blank">Find</a>
+            <a class="nav-link" href="/games" target = "_blank">Find</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" >About</a>
@@ -55,8 +55,13 @@
             <!--  <p>You are not logged in</p> -->
               <a class = "nav-link" href="{% url 'login' %}">Login</a>
             {% endif %}
+
           </li>
-          </form>
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'view_profile' %}">Your Profile</a>
+            {% endif %}
+          </li>
         </ul>
       </div>
     </nav>
@@ -64,5 +69,7 @@
       {% block body %}
       <h1> BASE </h1>
       {% endblock %}
-
+      <div class="jumbotron text-center" style="margin-bottom:0">
+        <h1>Board at Home</h1>
+        </div>
 </body>

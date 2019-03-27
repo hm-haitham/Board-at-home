@@ -52,7 +52,6 @@ def get_game_user_relation(user_id, game_id):
 def add_to_wishlist(request, game_id):
     print (request.user.id)
     game = get_game_sql(game_id)
-    print request.META.get('HTTP_REFERER')
     with connection.cursor() as cursor:
         result = get_game_user_relation(request.user.id, game_id)
         if not result:
