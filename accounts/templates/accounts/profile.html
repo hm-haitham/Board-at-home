@@ -1,11 +1,6 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
-
-<title>Board at Home - {{ user }} Profile</title>
-
-
 {% endblock %}
 
 
@@ -27,10 +22,34 @@
       <p>.</p>
       <ul class="nav nav-pills flex-column">
         <li class="nav-item">
-          <a class="nav-link active" href="#">View Wishlist</a>
+            <a class="nav-link active" href="#">Wishlist</a>
+            {% if wishlist_games %}
+                <u1 style="margin-bottom:8">
+                    {% for game in wishlist_games %}
+                        <li>
+                            <button onclick="window.location.href = 'remove_wishlist/{{ game.Game_ID }}';"> X </button>
+                            <a href="/games/{{ game.Game_ID }}/"> {{ game.Name }} </a>
+                        </li>
+                    {% endfor %}
+                </u1>
+            {% else %}
+                <h3>No games in wishlist</h3>
+            {% endif %}
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="#">View Owned Games</a>
+            <a class="nav-link active" href="#">Owned Games</a>
+            {% if ownedlist_games %}
+                <u1 style="margin-bottom:8">
+                    {% for game in ownedlist_games %}
+                        <li>
+                            <button onclick="window.location.href = 'remove_ownedlist/{{ game.Game_ID }}';"> X </button>
+                            <a href="/games/{{ game.Game_ID }}/"> {{ game.Name }} </a>
+                        </li>
+                    {% endfor %}
+                </u1>
+            {% else %}
+                <h3>You don't own any games</h3>
+            {% endif %}
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'edit_profile' %}">Edit Account</a>
