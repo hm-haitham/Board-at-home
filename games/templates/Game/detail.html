@@ -45,20 +45,13 @@
 
         {% block content %}
             {% if user.is_authenticated %}
-                Hi {{ user.username }}!
-
-                <button type="submit" name="add_wishlist">Add to wishlist</button>>
-                <button type="submit" name="add_ownedlist">Add to owned games</button>
+                <p style="margin-left:10px">
+                    <button onclick="window.location.href = 'add_wishlist/';">Add to wishlist</button><br>
+                    <button onclick="window.location.href = 'add_owned/';">Add to owned games</button><br>
+                </p>
             {% else %}
-              <a style="margin-left:10px">Login to add this game to your wishlist or owned games list</a>
+              <a style="margin-left:10px">Login to add this game to your wishlist or owned games list</a><br>
             {% endif %}
         {% endblock %}
     {% endblock %}
-
-
-
-
-{#{% else %}#}
-{#    <h3>No games</h3>#}
-{#{% endif %}#}
 
