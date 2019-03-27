@@ -9,6 +9,7 @@ urlpatterns = [
     url('register/', views.register, name = "register"),
     url('search/', views.search, name = "search"),
     url('about/', views.about, name = 'about'),
+    url(r'^random/$', views.get_random_game, name="random"),
     url(r'^profile/$',views.view_profile, name ="view_profile"),
     url(r'^profile/remove_wishlist/(?P<game_id>[0-9]+)$',views.remove_from_wishlist, name ="remove_from_wishlist"),
     url(r'^profile/remove_ownedlist/(?P<game_id>[0-9]+)$',views.remove_from_ownedlist, name ="remove_from_ownedlist"),
