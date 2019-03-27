@@ -26,7 +26,7 @@
     <!-- Jumbotron at the head of the page -->
     <div class="jumbotron text-center" style="margin-bottom:0">
       <h1>Board at Home</h1>
-      <p>Find the games that work for you</p>
+      <p>Find the games you're looking for</p>
     </div>
 
 
@@ -47,19 +47,28 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/accounts/about/" >About</a>
-          <li class="nav-item">
+          </li>
+          <li class="nav-link">
             {% if user.is_authenticated %}
-              Hi {{ user.username }}!
-              <p><a href="{% url 'logout' %}">logout</a></p>
+          </li>
+              <a class= "nav-link" href= "{% url 'logout' %}">Logout</a>
             {% else %}
             <!--  <p>You are not logged in</p> -->
               <a class = "nav-link" href="{% url 'login' %}">Login</a>
             {% endif %}
-
           </li>
+
           <li class="nav-item">
             {% if user.is_authenticated %}
             <a class="nav-link" href="{% url 'view_profile' %}">Your Profile</a>
+            {% endif %}
+          </li>
+        </ul>
+        <ul class= "nav navbar-nav navbar-right">
+          <li class="nav-link navbar-right">
+            {% if user.is_authenticated %}
+              Hi {{ user.username }}!
+
             {% endif %}
           </li>
         </ul>

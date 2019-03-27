@@ -52,7 +52,7 @@ def remove_from_wishlist(request, game_id):
             cursor.execute("DELETE FROM Relation Where Game_ID=" + str(game_id) +
                            " and User_ID=" + str(request.user.id))
     wishlist = view_wishlist(request)
-    print wishlist
+    print (wishlist)
     wishlist_games = []
     for e in wishlist:
         wishlist_games.append(get_game_sql(e["Game_ID"]))
@@ -74,7 +74,7 @@ def remove_from_ownedlist(request, game_id):
             cursor.execute("DELETE FROM Relation Where Game_ID=" + str(game_id) +
                            " and User_ID=" + str(request.user.id))
     wishlist = view_wishlist(request)
-    print wishlist
+    print (wishlist)
     wishlist_games = []
     for e in wishlist:
         wishlist_games.append(get_game_sql(e["Game_ID"]))
@@ -116,7 +116,7 @@ def register(request):
 
 def search_game_sql(name):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM games WHERE Name LIKE '" + str(name) + "%';")
+        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%';")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows
 
@@ -134,7 +134,7 @@ def search(request):
 
 def view_profile(request):
     wishlist = view_wishlist(request)
-    print wishlist
+    print (wishlist)
     wishlist_games = []
     for e in wishlist:
         wishlist_games.append(get_game_sql(e["Game_ID"]))
@@ -158,6 +158,6 @@ def edit_profile(request):
         form = EditProfileForm(instance =request.user)
         args = {'form': form}
         return render(request,"accounts/edit_profile.html", args)
-  
+
 def about(request):
     return render(request, "accounts/about.html")
