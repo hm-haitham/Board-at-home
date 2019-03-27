@@ -1,14 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-{% block head %}
-<title>Board at Home - Search </title>
-
-{% endblock %}
 {% block body %}
 
-<div class="dropdown">
+<!-- <div class="dropdown">
   <h1>Search Results</h1>
   <hr>
 <form autocomplete="off" action="/action_page.php">
@@ -16,20 +11,19 @@
     <input id="myInput" type="text" name="Game" placeholder="Name of Game">
   </div>
   <input type="submit">
-</form>
-<!--     <datalist id="Number_of_players">
+</form>     <datalist id="Number_of_players">
         <option>2-4</option>
         <option>5-10</option>
         <option>10+</option>
     </datalist>
-    <input  autoComplete="off" list="Number_of_players" placeholder="Number of Players" />
+    <input  autoComplete="off" list="Number_of_players" placeholder="Number of Players" /> 
     <datalist id="Category">
         <option>Adventure</option>
         <option>Educational</option>
         <option>Dice</option>
         <option>Family</option>
     </datalist>
-    <input  autoComplete="off" list="Category" placeholder="Category"/>
+    <input  autoComplete="off" list="Category" placeholder="Category"/> 
     <datalist id="Ratings">
         <option>1</option>
         <option>2</option>
@@ -37,8 +31,7 @@
         <option>4</option>
         <option>5</option>
     </datalist>
-    <input  autoComplete="off" list="Ratings" placeholder="Ratings"/>  -->
-</div>
+    <input  autoComplete="off" list="Ratings" placeholder="Ratings"/>  </div>
 
 <script>
 function autocomplete(inp, arr) {
@@ -144,6 +137,45 @@ var countries = ["Catan","Monopoly","Chess"];
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), countries);
-</script>
+</script> -->
+
+<div class="container">
+<h1> Search Game Information</h1>
+<form method="post" action="/search/">
+		{% csrf_token %}
+		<div class="form-group">
+			<div class="col-lg-5">
+		<input type="text" name="srh" class="form-control" placeholder="Enter Name of Game">
+			</div>
+			<label class="col-lg-2">
+				<button type="submit" class="btn btn-danger">Search</button>
+			</label>
+		</div>
+
+</form><br><br>
+<div>
+	{% if messages %}
+		<ul class="messages">
+			{% for k in messages %}
+			<li style="color: red">{{ k }}</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+</div><br>
+	<div style="color: blue">
+		{% if sr %}
+			{% for k in sr %}
+			<table border="0px" width="300px">
+			<tr>
+				<td>Name</td>
+				<td>{{ k.City }}</td>
+			</tr>
+
+			</table>
+		<hr>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>
 
 {% endblock %}
