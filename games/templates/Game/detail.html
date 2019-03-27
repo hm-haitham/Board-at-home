@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+    {% block body %}
+        {% if game %}
+        <div class="container" style="margin-top:8px">
+            <h1 style="font-weight: bold">{{ game.Name }}</h1><br>
+            <img src={{ game.Image }} class="img-fluid"><br>
+            <a style="font-weight: bold">Game description: </a>{{ game.Description }}<br>
+            <a style="font-weight: bold">Game rating: </a>{{ game.Rating }}<br>
+            <a style="font-weight: bold">Minimum age: </a>{{ game.Min_age }}<br>
+            <a style="font-weight: bold">Minimum number of players: </a>{{ game.Min_players }}<br>
+            <a style="font-weight: bold">Playing time: </a>{{ game.Playing_time }}<br>
+            <a style="font-weight: bold">Game category: </a>{{ game.Category }}<br>
+            <a style="font-weight: bold">BoardGame Artist: </a>{{ game.Boardgame_artist }}<br>
+            <a style="font-weight: bold">BoardGame Mechanics: </a>{{ game.Mechanics }}<br>
+            {% if game.Suggested_numplayers.1|stringformat:"s" == "Best" %}
+                <a>Recommended number of players: 1 </a><br>
+            {% endif %}
+            {% if game.Suggested_numplayers.2|stringformat:"s" == "Best"|stringformat:"s" %}
+                <a>Recommended number of players: 2 </a><br>
+            {% endif %}
+            {% if game.Suggested_numplayers.3|stringformat:"s" == "Best"|stringformat:"s" %}
+                <a>Recommended number of players: 3 </a><br>
+            {% endif %}
+            {% if game.Suggested_numplayers.4|stringformat:"s" == "Best"|stringformat:"s" %}
+                <a>Recommended number of players: 4 </a><br>
+            {% endif %}
+            {% if game.Suggested_numplayers.5|stringformat:"s" == "Best"|stringformat:"s" %}
+                <a>Recommended number of players: 5 </a><br>
+            {% endif %}
+            {% if game.Suggested_numplayers.6|stringformat:"s" == "Best"|stringformat:"s" %}
+                <a>Recommended number of players: 6 </a><br>
+            {% endif %}
+            {% if game.Suggested_numplayers.7|stringformat:"s" == "Best"|stringformat:"s" %}
+                <a>Recommended number of players: 7 </a><br>
+            {% endif %}
+            {% if game.Suggested_numplayers.8|stringformat:"s" == "Best"|stringformat:"s" %}
+                <a>Recommended number of players: 8 </a><br>
+            {% endif %}
+            {% if game.Suggested_numplayers.Over|stringformat:"s" == "Best"|stringformat:"s" %}
+                <a>Recommended number of players: at least 10 </a><br>
+            {% endif %}
+        </div><br>
+        {% endif %}
+
+        {% block content %}
+            {% if user.is_authenticated %}
+                Hi {{ user.username }}!
+
+                <button type="submit" name="add_wishlist">Add to wishlist</button>>
+                <button type="submit" name="add_ownedlist">Add to owned games</button>
+            {% else %}
+              <a style="margin-left:10px">Login to add this game to your wishlist or owned games list</a>
+            {% endif %}
+        {% endblock %}
+    {% endblock %}
+
+
+
+
+{#{% else %}#}
+{#    <h3>No games</h3>#}
+{#{% endif %}#}
+
