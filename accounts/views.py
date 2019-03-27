@@ -115,7 +115,19 @@ def register(request):
 
 
 def search(request):
-    return render(request, "accounts/Search_Page.html")
+    if request.method=='POST':
+        srch = request.POST['srh']
+
+        if srch:
+            match = student.objects.filter(Q(city__icontains=srch))
+            if match:
+                return render(request, "accounts/Search_Page.html", {'sr':match})
+            else:
+                message.error(request, 'no result found')
+        else:
+            return HttpResponseRedirect('/accounts/search/')
+    return render(request, 'accounts/Search_Page.html')
+
 
 def view_profile(request):
     wishlist = view_wishlist(request)
