@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+<body>
+    {% block body %}
+        <h1>Games</h1>
+            {% if games %}
+                <u1 style="margin-bottom:10">
+                    {% for game in games %}
+                    <li><a href="/games/{{ game.Game_ID }}/"> {{ game.Name }} </a></li>
+                    {% endfor %}
+                </u1>
+            {% else %}
+                <h3>No games</h3>
+            {% endif %}
+    {% endblock %}
+</body>
