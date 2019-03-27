@@ -161,3 +161,12 @@ def edit_profile(request):
 
 def about(request):
     return render(request, "accounts/about.html")
+
+def get_random_game(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM games ;")
+        game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
+        game= random.choice(game_rows)
+        if not game:
+            raise Http404("Game does not exist")
+    return render(request, "Game/detail.html", {'game': game, 'user': request.user})
