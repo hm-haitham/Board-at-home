@@ -16,14 +16,14 @@
         <option>5-10</option>
         <option>10+</option>
     </datalist>
-    <input  autoComplete="off" list="Number_of_players" placeholder="Number of Players" /> 
+    <input  autoComplete="off" list="Number_of_players" placeholder="Number of Players" />
     <datalist id="Category">
         <option>Adventure</option>
         <option>Educational</option>
         <option>Dice</option>
         <option>Family</option>
     </datalist>
-    <input  autoComplete="off" list="Category" placeholder="Category"/> 
+    <input  autoComplete="off" list="Category" placeholder="Category"/>
     <datalist id="Ratings">
         <option>1</option>
         <option>2</option>
@@ -167,7 +167,7 @@ autocomplete(document.getElementById("myInput"), countries);
 			{% for game in games %}
 			<table border="0px" width="300px">
 			<tr>
-				<a>Name:</a>
+
 				<a href="/games/{{ game.Game_ID }}/">   {{ game.Name }}</a>
 			</tr>
 
