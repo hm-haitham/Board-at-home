@@ -141,7 +141,7 @@ autocomplete(document.getElementById("myInput"), countries);
 
 <div class="container">
 <h1> Search Game Information</h1>
-<form method="post" action="/search/">
+<form method="post" action="/accounts/search/">
 		{% csrf_token %}
 		<div class="form-group">
 			<div class="col-lg-5">
@@ -163,12 +163,12 @@ autocomplete(document.getElementById("myInput"), countries);
 	{% endif %}
 </div><br>
 	<div style="color: blue">
-		{% if sr %}
-			{% for k in sr %}
+		{% if games %}
+			{% for game in games %}
 			<table border="0px" width="300px">
 			<tr>
-				<td>Name</td>
-				<td>{{ k.City }}</td>
+				<a>Name:</a>
+				<a href="/games/{{ game.Game_ID }}/">   {{ game.Name }}</a>
 			</tr>
 
 			</table>
