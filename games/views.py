@@ -8,7 +8,6 @@ import unicodedata
 from django.http import HttpResponseRedirect
 
 
-
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
     columns = [col[0] for col in cursor.description]
