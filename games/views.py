@@ -5,7 +5,6 @@ from django.shortcuts import render
 from django.db import connection
 from django.urls import resolve
 import unicodedata
-from .forms import NameForm
 from django.http import HttpResponseRedirect
 
 
