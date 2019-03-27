@@ -4,7 +4,7 @@
         {% if game %}
         <div class="container" style="margin-top:8px">
             <h1 style="font-weight: bold">{{ game.Name }}</h1><br>
-            <img src={{ game.Image }} class="img-fluid"><br>
+            <img src={{ game.Image }}" class="img-fluid"><br>
             <a style="font-weight: bold">Game description: </a>{{ game.Description }}<br>
             <a style="font-weight: bold">Game rating: </a>{{ game.Rating }}<br>
             <a style="font-weight: bold">Minimum age: </a>{{ game.Min_age }}<br>
@@ -43,15 +43,16 @@
         </div><br>
         {% endif %}
 
-        {% block content %}
+
+        <div class="container" style="margin-top:8px">
             {% if user.is_authenticated %}
                 <p style="margin-left:10px">
-                    <button onclick="window.location.href = 'add_wishlist/';">Add to wishlist</button><br>
-                    <button onclick="window.location.href = 'add_owned/';">Add to owned games</button><br>
+                    <button class = "nav-link" onclick="window.location.href = 'add_wishlist/';">Add to wishlist</button><br>
+                    <button class = "nav-link" onclick="window.location.href = 'add_owned/';">Add to owned games</button><br>
                 </p>
             {% else %}
               <a style="margin-left:10px">Login to add this game to your wishlist or owned games list</a><br>
             {% endif %}
-        {% endblock %}
-    {% endblock %}
 
+        </div>
+    {% endblock %}
