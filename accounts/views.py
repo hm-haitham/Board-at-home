@@ -2,7 +2,8 @@ from django.shortcuts import render, HttpResponse, redirect
 from accounts.forms import RegistrationForm, UserProfileForm, EditProfileForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
-# Create your views here.
+from django.db import connection
+from django.http import HttpResponseRedirect
 
 
 def dictfetchall(cursor):
@@ -16,14 +17,14 @@ def dictfetchall(cursor):
 # Retreive the names of the Games in wishlist from database
 def view_wishlist(request):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT Name FROM Relation Where Wishlist=true and User_ID=" + str(request.user.id))
+        cursor.execute("SELECT Game_ID FROM Relation Where Wishlist=true and User_ID=" + str(request.user.id))
         result = dictfetchall(cursor)
     return result
 
 # Retreive the names of the Games in wishlist from database
 def view_ownedlist(request):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT Name FROM Relation Where Owned=true and User_ID=" + str(request.user.id))
+        cursor.execute("SELECT Game_ID FROM Relation Where Owned=true and User_ID=" + str(request.user.id))
         result = dictfetchall(cursor)
     return result
 
@@ -33,30 +34,56 @@ def get_game_sql(game_id):
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows[0]
 
+def get_relation_sql(game_id):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM Relation WHERE Game_ID=" + str(game_id) + ";")
+        game_rows = dictfetchall(cursor)
+    return game_rows[0]
+
+
 # Remove the names of the Games in wishlist from database
 def remove_from_wishlist(request, game_id):
     with connection.cursor() as cursor:
-        result = get_game_sql(game_id)
+        result = get_relation_sql(game_id)
         if result["Owned"]:
             cursor.execute("UPDATE Relation SET Wishlist=false WHERE User_ID="
                            + str(request.user.id) + " AND Game_ID=" + str(game_id))
         else:
             cursor.execute("DELETE FROM Relation Where Game_ID=" + str(game_id) +
                            " and User_ID=" + str(request.user.id))
-    return result
+    wishlist = view_wishlist(request)
+    print wishlist
+    wishlist_games = []
+    for e in wishlist:
+        wishlist_games.append(get_game_sql(e["Game_ID"]))
+    ownedlist = view_ownedlist(request)
+    ownedlist_games = []
+    for e in ownedlist:
+        ownedlist_games.append(get_game_sql(e["Game_ID"]))
+    args = {'user': request.user, 'wishlist_games': wishlist_games, 'ownedlist_games': ownedlist_games}
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'), args)
 
 # Remove the names of the Games in wishlist from database
-def view_ownedlist(request):
+def remove_from_ownedlist(request, game_id):
     with connection.cursor() as cursor:
-        result = get_game_sql(game_id)
+        result = get_relation_sql(game_id)
         if result["Wishlist"]:
             cursor.execute("UPDATE Relation SET Owned=false WHERE User_ID="
                            + str(request.user.id) + " AND Game_ID=" + str(game_id))
         else:
             cursor.execute("DELETE FROM Relation Where Game_ID=" + str(game_id) +
                            " and User_ID=" + str(request.user.id))
-    return result
-
+    wishlist = view_wishlist(request)
+    print wishlist
+    wishlist_games = []
+    for e in wishlist:
+        wishlist_games.append(get_game_sql(e["Game_ID"]))
+    ownedlist = view_ownedlist(request)
+    ownedlist_games = []
+    for e in ownedlist:
+        ownedlist_games.append(get_game_sql(e["Game_ID"]))
+    args = {'user': request.user, 'wishlist_games': wishlist_games, 'ownedlist_games': ownedlist_games}
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'), args)
 
 def home(request):
     numbers = [1,2,3,4,5]
@@ -90,16 +117,18 @@ def register(request):
 def search(request):
     return render(request, "accounts/Search_Page.html")
 
-
-
 def view_profile(request):
-    args ={'user': request.user}
+    wishlist = view_wishlist(request)
+    print wishlist
+    wishlist_games = []
+    for e in wishlist:
+        wishlist_games.append(get_game_sql(e["Game_ID"]))
+    ownedlist = view_ownedlist(request)
+    ownedlist_games = []
+    for e in ownedlist:
+        ownedlist_games.append(get_game_sql(e["Game_ID"]))
+    args = {'user': request.user, 'wishlist_games': wishlist_games, 'ownedlist_games': ownedlist_games}
     return render(request, "accounts/profile.html", args)
-
-def about(request):
-    return render(request, "accounts/about.html")
-
-
 
 
 def edit_profile(request):
@@ -114,3 +143,6 @@ def edit_profile(request):
         form = EditProfileForm(instance =request.user)
         args = {'form': form}
         return render(request,"accounts/edit_profile.html", args)
+  
+def about(request):
+    return render(request, "accounts/about.html")
