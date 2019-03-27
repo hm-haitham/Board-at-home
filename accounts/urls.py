@@ -7,7 +7,7 @@ urlpatterns = [
     url('login/', LoginView.as_view(template_name='accounts/login.html'), name="login"),
     url('logout/', LogoutView.as_view(template_name='accounts/logout.html'), name="logout"),
     url('register/', views.register, name = "register"),
-    url(r'^search/$', views.search, name = "search"),
+    url('search/', views.search, name = "search"),
     url('about/', views.about, name = 'about'),
     url(r'^profile/$',views.view_profile, name ="view_profile"),
     url(r'^profile/remove_wishlist/(?P<game_id>[0-9]+)$',views.remove_from_wishlist, name ="remove_from_wishlist"),
