@@ -96,6 +96,9 @@ def view_profile(request):
     args ={'user': request.user}
     return render(request, "accounts/profile.html", args)
 
+def about(request):
+    return render(request, "accounts/about.html")
+
 
 
 

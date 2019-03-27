@@ -9,6 +9,7 @@ urlpatterns = [
     url('logout/', LogoutView.as_view(template_name='accounts/logout.html'), name="logout"),
     url('register/', views.register, name = "register"),
     url('search/', views.search, name = "search"),
+    url('about/', views.about, name = 'about'),
     url(r'^profile/$',views.view_profile, name ="view_profile"),
     url(r'^profile/edit/$',views.edit_profile, name ="edit_profile")
 ]

@@ -61,10 +61,7 @@ def add_to_wishlist(request, game_id):
             cursor.execute("UPDATE Relation SET Wishlist=true WHERE User_ID="
                            + str(request.user.id) + " AND Game_ID="+str(game_id))
         print("Succes")
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM Relation;")
-        game_rows = dictfetchall(cursor)
-        print(game_rows)
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'), {'game': game, 'user': request.user})
 
 def add_to_ownedlist(request, game_id):
@@ -79,8 +76,5 @@ def add_to_ownedlist(request, game_id):
             cursor.execute("UPDATE Relation SET Owned=true WHERE User_ID="
                            + str(request.user.id) + " AND Game_ID=" + str(game_id))
         print("Succes")
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM Relation;")
-        game_rows = dictfetchall(cursor)
-        print(game_rows)
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'), {'game': game, 'user': request.user})

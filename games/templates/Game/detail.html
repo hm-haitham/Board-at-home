@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block head %}
+<title>Board at Home - {{game.Name}}</title>
+
+{% endblock %}
     {% block body %}
         {% if game %}
         <div class="container" style="margin-top:8px">
             <h1 style="font-weight: bold">{{ game.Name }}</h1><br>
-            <img src={{ game.Image }}" class="img-fluid"><br>
+            <img src="{{ game.Image }}" class="img-fluid"><br>
             <a style="font-weight: bold">Game description: </a>{{ game.Description }}<br>
             <a style="font-weight: bold">Game rating: </a>{{ game.Rating }}<br>
             <a style="font-weight: bold">Minimum age: </a>{{ game.Min_age }}<br>

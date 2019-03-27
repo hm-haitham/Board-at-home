@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+{% block head %}
+<title>Board at Home - Search </title>
+
+{% endblock %}
 {% block body %}
 
 <div class="dropdown">
@@ -17,14 +22,14 @@
         <option>5-10</option>
         <option>10+</option>
     </datalist>
-    <input  autoComplete="off" list="Number_of_players" placeholder="Number of Players" /> 
+    <input  autoComplete="off" list="Number_of_players" placeholder="Number of Players" />
     <datalist id="Category">
         <option>Adventure</option>
         <option>Educational</option>
         <option>Dice</option>
         <option>Family</option>
     </datalist>
-    <input  autoComplete="off" list="Category" placeholder="Category"/> 
+    <input  autoComplete="off" list="Category" placeholder="Category"/>
     <datalist id="Ratings">
         <option>1</option>
         <option>2</option>
