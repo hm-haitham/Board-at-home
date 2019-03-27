@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.http import  HttpResponse, Http404
 from django.shortcuts import render
 from django.db import connection
+from django.urls import resolve
 import unicodedata
 
 def dictfetchall(cursor):
@@ -47,3 +48,15 @@ def detail(request, game_id):
     if not game:
         raise Http404("Game does not exist")
     return render(request, "Game/detail.html", {'game': game, 'user': request.user})
+
+def add_to_list(request):
+    game_id = request.path.split('/')[2].strip()
+    if 'add_wishlist' in request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO Relation(Game_ID, User_id, Wishlist) VALUES("
+                           + str(game_id) + "," + str(request.user) + ", True);")
+    if 'add_ownedlist' in request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO Relation(Game_ID, User_id, Owned) VALUES("
+                           + str(game_id) + "," + str(request.user) + ", True);")
+    return render(request, "Game/detail.html")
