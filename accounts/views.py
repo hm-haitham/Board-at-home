@@ -105,8 +105,7 @@ def register(request):
             profile.user = user
 
             profile.save()
-
-            return redirect('/accounts')
+        return redirect('/accounts')
     else:
         form = RegistrationForm()
         profile_form = UserProfileForm()
