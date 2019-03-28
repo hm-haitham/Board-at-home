@@ -169,4 +169,6 @@ def get_random_game(request):
         game= random.choice(game_rows)
         if not game:
             raise Http404("Game does not exist")
-    return render(request, "Game/detail.html", {'game': game, 'user': request.user})
+    return HttpResponseRedirect('/games/'+str(game["Game_ID"]), {'game': game, 'user': request.user})
+
+    #return render(request, "Game/detail.html", {'game': game, 'user': request.user})
