@@ -170,7 +170,18 @@ autocomplete(document.getElementById("myInput"), countries);
 
 				<a href="/games/{{ game.Game_ID }}/">   {{ game.Name }}</a>
 			</tr>
+				
+			<tr>
+				<a>   {{ game.Category }}</a>
+			</tr>
 
+			<tr>
+				<a>   {{ game.rating }}</a>
+			</tr>
+
+			<tr>
+				<a>   {{ game.image }}</a>
+			</tr>
 			</table>
 		<hr>
 			{% endfor %}
