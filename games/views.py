@@ -76,5 +76,18 @@ def add_to_ownedlist(request, game_id):
             cursor.execute("UPDATE Relation SET Owned=true WHERE User_ID="
                            + str(request.user.id) + " AND Game_ID=" + str(game_id))
         print("Succes")
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'), {'game': game, 'user': request.user})
 
+def add_rating(request, game_id, score):
+    print ("add rating called")
+    game = get_game_sql(game_id)
+    with connection.cursor() as cursor:
+        result = get_game_user_relation(request.user.id, game_id)
+        if not result:
+            cursor.execute("INSERT INTO Relation(Game_ID, User_ID, Score) VALUES("
+                           + str(game_id) + "," + str(request.user.id) + ", " + str(score) + ");")
+        else:
+            cursor.execute("UPDATE Relation SET Score=" + str(score) + " WHERE User_ID="
+                           + str(request.user.id) + " AND Game_ID=" + str(game_id))
+        print("Succes")
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'), {'game': game, 'user': request.user})
