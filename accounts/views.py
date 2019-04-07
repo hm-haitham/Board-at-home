@@ -18,14 +18,14 @@ def dictfetchall(cursor):
 # Retreive the names of the Games in wishlist from database
 def view_wishlist(request):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT Game_ID FROM Relation Where Wishlist=true and User_ID=" + str(request.user.id))
+        cursor.execute("SELECT Game_ID, Score FROM Relation Where Wishlist=true and User_ID=" + str(request.user.id))
         result = dictfetchall(cursor)
     return result
 
 # Retreive the names of the Games in wishlist from database
 def view_ownedlist(request):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT Game_ID FROM Relation Where Owned=true and User_ID=" + str(request.user.id))
+        cursor.execute("SELECT Game_ID, Score FROM Relation Where Owned=true and User_ID=" + str(request.user.id))
         result = dictfetchall(cursor)
     return result
 
@@ -97,7 +97,6 @@ def register(request):
         form = RegistrationForm(request.POST)
         profile_form = UserProfileForm(request.POST)
 
-
         if form.is_valid() and profile_form.is_valid():
             user = form.save()
 
@@ -105,6 +104,7 @@ def register(request):
             profile.user = user
 
             profile.save()
+
         return redirect('/accounts')
     else:
         form = RegistrationForm()
@@ -134,14 +134,13 @@ def search(request):
 
 def view_profile(request):
     wishlist = view_wishlist(request)
-    print (wishlist)
     wishlist_games = []
     for e in wishlist:
-        wishlist_games.append(get_game_sql(e["Game_ID"]))
+        wishlist_games.append([get_game_sql(e["Game_ID"]), e["Score"]])
     ownedlist = view_ownedlist(request)
     ownedlist_games = []
     for e in ownedlist:
-        ownedlist_games.append(get_game_sql(e["Game_ID"]))
+        ownedlist_games.append([get_game_sql(e["Game_ID"]), e["Score"]])
     args = {'user': request.user, 'wishlist_games': wishlist_games, 'ownedlist_games': ownedlist_games}
     return render(request, "accounts/profile.html", args)
 
@@ -170,5 +169,4 @@ def get_random_game(request):
         if not game:
             raise Http404("Game does not exist")
     return HttpResponseRedirect('/games/'+str(game["Game_ID"]), {'game': game, 'user': request.user})
-
-    #return render(request, "Game/detail.html", {'game': game, 'user': request.user})
+    # return render(request, "Game/detail.html", {'game': game, 'user': request.user})

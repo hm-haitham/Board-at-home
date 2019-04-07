@@ -25,10 +25,13 @@
             <a class="nav-link active" href="#">Wishlist</a>
             {% if wishlist_games %}
                 <u1 style="margin-bottom:8">
-                    {% for game in wishlist_games %}
+                    {% for game, score in wishlist_games %}
                         <li>
                             <button onclick="window.location.href = 'remove_wishlist/{{ game.Game_ID }}';"> X </button>
                             <a href="/games/{{ game.Game_ID }}/"> {{ game.Name }} </a>
+                            {% if score != None %}
+                                <a>         Score : {{ score }}</a>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </u1>
@@ -40,10 +43,13 @@
             <a class="nav-link active" href="#">Owned Games</a>
             {% if ownedlist_games %}
                 <u1 style="margin-bottom:8">
-                    {% for game in ownedlist_games %}
+                    {% for game, score in ownedlist_games %}
                         <li>
                             <button onclick="window.location.href = 'remove_ownedlist/{{ game.Game_ID }}';"> X </button>
                             <a href="/games/{{ game.Game_ID }}/"> {{ game.Name }} </a>
+                            {% if score != None %}
+                                <a> Score : {{ score }}</a>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </u1>
