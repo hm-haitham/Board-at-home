@@ -114,17 +114,18 @@ def register(request):
         return render(request,'accounts/reg_form.html', args)
 
 
-def search_game_sql(name):
+def search_game_sql(name,category):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%';")
+        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%';")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows
 
 def search(request):
     if request.method=='POST':
         srch = request.POST['srh']
-        if srch:
-            games = search_game_sql(srch)
+        srch2 = request.POST['srh2']
+        if (srch or srch2):
+            games = search_game_sql(srch,srch2)
             if games:
                 return render(request, "accounts/Search_Page.html", {'games': games})
         else:
