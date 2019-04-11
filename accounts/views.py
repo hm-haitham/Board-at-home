@@ -124,9 +124,9 @@ def register(request):
         return render(request,'accounts/reg_form.html', args)
 
 
-def search_game_sql(name,category):
+def search_game_sql(name,category,players):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%';")
+        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players = " + str(players) + ";")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows
 
@@ -134,12 +134,22 @@ def search(request):
     if request.method=='POST':
         srch = request.POST['srh']
         srch2 = request.POST['srh2']
-        if (srch or srch2):
-            games = search_game_sql(srch,srch2)
-            if games:
-                return render(request, "accounts/Search_Page.html", {'games': games})
+        srch3 = request.POST['srh3']
+        if srch3:
+            if (srch or srch2):
+                games = search_game_sql(srch,srch2,srch3)
+                if games:
+                    return render(request, "accounts/Search_Page.html", {'games': games})
+            else:
+                return HttpResponseRedirect('/accounts/search/')
         else:
-            return HttpResponseRedirect('/accounts/search/')
+            if (srch or srch2):
+                games = search_game_sql(srch,srch2,'Min_players')
+                if games:
+                    return render(request, "accounts/Search_Page.html", {'games': games})
+            else:
+                return HttpResponseRedirect('/accounts/search/')           
+
     return render(request, 'accounts/Search_Page.html')
 
 
