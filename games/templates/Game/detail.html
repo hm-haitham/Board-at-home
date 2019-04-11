@@ -9,15 +9,15 @@
         {% if game %}
         <div class="container" style="margin-top:8px">
             <h1 style="font-weight: bold">{{ game.Name }}</h1><br>
-            <img src="{{ game.Image }}" class="img-fluid"><br>
+            <img src="{{ game.Image }}" class="img"><br>
             <a style="font-weight: bold">Game description: </a>{{ game.Description }}<br>
             <a style="font-weight: bold">Game rating: </a>{{ game.Rating }}<br>
             <a style="font-weight: bold">Minimum age: </a>{{ game.Min_age }}<br>
             <a style="font-weight: bold">Minimum number of players: </a>{{ game.Min_players }}<br>
-            <a style="font-weight: bold">Playing time: </a>{{ game.Playing_time }}<br>
+            <a style="font-weight: bold">Average Playing time: </a>{{ game.Playing_time }}<br>
             <a style="font-weight: bold">Game category: </a>{{ game.Category }}<br>
-            <a style="font-weight: bold">BoardGame Artist: </a>{{ game.Boardgame_artist }}<br>
-            <a style="font-weight: bold">BoardGame Mechanics: </a>{{ game.Mechanics }}<br>
+            <a style="font-weight: bold">Board Game Artist: </a>{{ game.Boardgame_artist }}<br>
+            <a style="font-weight: bold">Board Game Mechanics: </a>{{ game.Mechanics }}<br>
             {% if game.Suggested_numplayers.1|stringformat:"s" == "Best" %}
                 <a>Recommended number of players: 1 </a><br>
             {% endif %}

@@ -42,6 +42,16 @@ def get_relation_sql(game_id):
     return game_rows[0]
 
 
+
+#Find people who share zip code and own a game on your wish Wishlist
+
+def wishlist_owned_finder(game_id):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT O.user_ID, O.Game_ID FROM (SELECT user_id, Game_id, Wishlist FROM Relations WHERE User_ID=" + str(request.user.id) + " AND Wishlist = True) U RIGHT OUTER JOIN (SELECT user_id, game_id, Owned FROM Relations WHERE Owned = True) O    ON U.Game_id = O.Game_id")
+        result = dictfetchall(cursor)
+    return result
+
+
 # Remove the names of the Games in wishlist from database
 def remove_from_wishlist(request, game_id):
     with connection.cursor() as cursor:
@@ -161,6 +171,9 @@ def edit_profile(request):
 
 def about(request):
     return render(request, "accounts/about.html")
+
+def find_nearby_players(request):
+    return render(request, "accounts/nearby_players.html")
 
 def get_random_game(request):
     with connection.cursor() as cursor:
