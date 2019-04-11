@@ -144,9 +144,15 @@ autocomplete(document.getElementById("myInput"), countries);
 <form method="post" action="/accounts/search/">
 		{% csrf_token %}
 		<div class="form-group">
-			<div class="col-lg-5">
+			<div class="col-lg-4">
 		<input type="text" name="srh" class="form-control" placeholder="Enter Name of Game">
 			</div>
+      <div class="col-lg-4">
+    <input type="text" name="srh2" class="form-control" placeholder="Enter Category of Game">
+      </div>
+      <div class="col-lg-4">
+    <input type="text" name="srh3" class="form-control" placeholder="Enter Minimum Number of players">
+      </div>
 			<label class="col-lg-2">
 				<button type="submit" class="btn btn-danger">Search</button>
 			</label>
@@ -178,7 +184,11 @@ autocomplete(document.getElementById("myInput"), countries);
 			<tr>
 				<td>   {{ game.Year_published }}</td>
 			</tr>
-				
+
+      <tr>
+        <td>   {{ game.Year_published }}</td>
+      </tr>
+      				
 			</table>
 		<hr>
 			{% endfor %}
