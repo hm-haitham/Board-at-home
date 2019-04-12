@@ -47,17 +47,19 @@ def get_relation_sql(game_id):
 
 def wishlist_owned_finder(game_id):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT O.user_ID, O.Game_ID FROM (SELECT user_id, Game_id, Wishlist FROM Relations WHERE User_ID=" + str(request.user.id) + " AND Wishlist = True) U RIGHT OUTER JOIN (SELECT user_id, game_id, Owned FROM Relations WHERE Owned = True) O    ON U.Game_id = O.Game_id")
+        cursor.execute("SELECT * FROM Relation")
         result = dictfetchall(cursor)
     return result
+
+#   "SELECT * FROM (SELECT user_id, Game_id, Wishlist FROM Relation WHERE User_ID= 1 AND Wishlist = True) U LEFT OUTER JOIN (SELECT user_id, game_id, Owned FROM Relation WHERE Owned = True) O    ON U.Game_id = O.Game_id"
 # SELECT *
 # FROM
 # (SELECT user_id, Game_ID
 # FROM Relation
 # WHERE Owned=TRUE) O LEFT OUTER JOIN
-# ((SELECT user_id, Game_ID, Wishlist 
+# ((SELECT user_id, Game_ID, Wishlist
 # FROM Relation
-# WHERE user_id=1 AND Wishlist=TRUE) 
+# WHERE user_id=1 AND Wishlist=TRUE)
 # NATURAL JOIN auth_user  NATURAL JOIN (SELECT user_id, zipcode FROM accounts_userprofile) A NATURAL JOIN (SELECT Game_ID from games) B) U
 # ON U.Game_ID=O.Game_ID
 
@@ -157,7 +159,7 @@ def search(request):
                 if games:
                     return render(request, "accounts/Search_Page.html", {'games': games})
             else:
-                return HttpResponseRedirect('/accounts/search/')           
+                return HttpResponseRedirect('/accounts/search/')
 
     return render(request, 'accounts/Search_Page.html')
 
