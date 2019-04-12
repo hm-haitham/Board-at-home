@@ -50,7 +50,16 @@ def wishlist_owned_finder(game_id):
         cursor.execute("SELECT O.user_ID, O.Game_ID FROM (SELECT user_id, Game_id, Wishlist FROM Relations WHERE User_ID=" + str(request.user.id) + " AND Wishlist = True) U RIGHT OUTER JOIN (SELECT user_id, game_id, Owned FROM Relations WHERE Owned = True) O    ON U.Game_id = O.Game_id")
         result = dictfetchall(cursor)
     return result
-
+# SELECT *
+# FROM
+# (SELECT user_id, Game_ID
+# FROM Relation
+# WHERE Owned=TRUE) O LEFT OUTER JOIN
+# ((SELECT user_id, Game_ID, Wishlist 
+# FROM Relation
+# WHERE user_id=1 AND Wishlist=TRUE) 
+# NATURAL JOIN auth_user  NATURAL JOIN (SELECT user_id, zipcode FROM accounts_userprofile) A NATURAL JOIN (SELECT Game_ID from games) B) U
+# ON U.Game_ID=O.Game_ID
 
 # Remove the names of the Games in wishlist from database
 def remove_from_wishlist(request, game_id):
