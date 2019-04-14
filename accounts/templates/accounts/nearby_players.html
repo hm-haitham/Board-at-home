@@ -9,5 +9,31 @@
 
 
 {% block body %}
-<h1>nearby_players</h1>
+
+  <div class="container" style="margin-top:8px">
+    <div class="row">
+     <div class ="col-sm-12">
+        <ul class="nav nav-pills flex-column">
+          <li class="nav-item">
+              <h2>Nearby People who own games you want to play</h2>
+              {% if result %}
+                  <u1 style="margin-bottom:8">
+                      {% for Tuple in result %}
+
+                      <li>
+                      <a style="font-weight: bold">Game Name: </a>{{ Tuple.name }} <br>
+                      <a style="font-weight: bold">Game Owner: </a>{{ Tuple.first_name }} <br>
+                      <a style="font-weight: bold">Owner Email: </a>{{ Tuple.email }} <br>
+                      <a style="font-weight: bold">Owner Zipcode: </a>{{ Tuple.owner_zipcode }} <br>
+                      <a style="font-weight: bold">ALL INFO: </a>type in { wdw {   tuple } } <br>
+                      <br>
+
+                      </li>
+                      {% endfor %}
+                  </u1>
+              {% else %}
+                  <h3>Add to your wishlist to find new friends</h3>
+              {% endif %}
+          </li>
+        
 {% endblock %}
