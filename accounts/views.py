@@ -41,28 +41,6 @@ def get_relation_sql(game_id):
         game_rows = dictfetchall(cursor)
     return game_rows[0]
 
-
-
-#Find people who share zip code and own a game on your wish Wishlist
-
-def wishlist_owned_finder(game_id):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM Relation")
-        result = dictfetchall(cursor)
-    return result
-
-#   "SELECT * FROM (SELECT user_id, Game_id, Wishlist FROM Relation WHERE User_ID= 1 AND Wishlist = True) U LEFT OUTER JOIN (SELECT user_id, game_id, Owned FROM Relation WHERE Owned = True) O    ON U.Game_id = O.Game_id"
-# SELECT *
-# FROM
-# (SELECT user_id, Game_ID
-# FROM Relation
-# WHERE Owned=TRUE) O LEFT OUTER JOIN
-# ((SELECT user_id, Game_ID, Wishlist
-# FROM Relation
-# WHERE user_id=1 AND Wishlist=TRUE)
-# NATURAL JOIN auth_user  NATURAL JOIN (SELECT user_id, zipcode FROM accounts_userprofile) A NATURAL JOIN (SELECT Game_ID from games) B) U
-# ON U.Game_ID=O.Game_ID
-
 # Remove the names of the Games in wishlist from database
 def remove_from_wishlist(request, game_id):
     with connection.cursor() as cursor:
@@ -135,9 +113,9 @@ def register(request):
         return render(request,'accounts/reg_form.html', args)
 
 
-def search_game_sql(name,category,players):
+def search_game_sql(name,category):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players = " + str(players) + ";")
+        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%';")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows
 
@@ -145,22 +123,12 @@ def search(request):
     if request.method=='POST':
         srch = request.POST['srh']
         srch2 = request.POST['srh2']
-        srch3 = request.POST['srh3']
-        if srch3:
-            if (srch or srch2):
-                games = search_game_sql(srch,srch2,srch3)
-                if games:
-                    return render(request, "accounts/Search_Page.html", {'games': games})
-            else:
-                return HttpResponseRedirect('/accounts/search/')
+        if (srch or srch2):
+            games = search_game_sql(srch,srch2)
+            if games:
+                return render(request, "accounts/Search_Page.html", {'games': games})
         else:
-            if (srch or srch2):
-                games = search_game_sql(srch,srch2,'Min_players')
-                if games:
-                    return render(request, "accounts/Search_Page.html", {'games': games})
-            else:
-                return HttpResponseRedirect('/accounts/search/')
-
+            return HttpResponseRedirect('/accounts/search/')
     return render(request, 'accounts/Search_Page.html')
 
 
@@ -192,9 +160,6 @@ def edit_profile(request):
 
 def about(request):
     return render(request, "accounts/about.html")
-
-def find_nearby_players(request):
-    return render(request, "accounts/nearby_players.html")
 
 def get_random_game(request):
     with connection.cursor() as cursor:

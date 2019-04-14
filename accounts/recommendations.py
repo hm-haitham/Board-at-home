@@ -28,6 +28,7 @@ def get_category_mapping():
         for row in cursor.fetchall():
             for e in row[0].split(","):
                 categories.add(e)
+        cursor.close()
         return {v:k for k, v in enumerate(categories)} # Returns dict {"CategoryName" : index}
 
 # Returns a vector v containing the average score of the games in a users wishlist, owned list or liked list of a given
@@ -45,6 +46,7 @@ def get_user_category_vector(userID):
         category_vector = np.zeros(len(category_mapping))
         for category in user_categories_rating:
             category_vector[category_mapping[category]] = user_categories_rating[category]
+        cursor.close()
         return np.array(category_vector)
 
 
@@ -61,6 +63,7 @@ def get_game_category_vector_recommendations(game_id):
             for category in row[0].split(","):
                 category_vector[category_mapping[category]] += 1
             category_vector *= row[1] / float(max_score)
+        cursor.close()
         return np.array(category_vector)
 
 # In database creates table Game_Category_Vectors that contains the item based game category vectors
@@ -95,10 +98,11 @@ def create_table_game_category_vector():
                     query += str(game_category_vectors[i][j]) + ", "
             query += ");"
             cursor.execute("Insert Into Game_Category_Vectors Values " + query)
+        cursor.close()
         return np.array(game_category_vectors)
 
 # Read game category vectors in databaase
-def get_game_category_vector():
+def get_game_category_vectors():
     with connection.cursor() as cursor:
         game_category_vectors = []
         cursor.execute("SELECT * FROM Game_Category_Vectors;")
@@ -125,6 +129,7 @@ def get_all_users_category_vectors():
         for i in count:
             print (i)
             vectors.append(np.array(np.hstack([get_user_category_vector(i[0]), i[0]]))) # append user_id to category vector
+        cursor.close()
         return np.array(vectors)
 
 def dictfetchall(cursor):
@@ -139,12 +144,16 @@ def get_games_user_based_suggestions(user_id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM games " +
                        "WHERE Game_ID in (SELECT Game_ID From Relation Where User_ID =" + str(user_id) + ");")
-        return dictfetchall(cursor)[0]
+        data = dictfetchall(cursor)[0]
+        cursor.close()
+        return data
 
 def get_game_sql(game_id):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM games WHERE Game_ID=" + str(game_id) + ";")
+        cursor.execute("SELECT * FROM games WHERE Name NOT NULL AND Game_ID=" + str(game_id) + ";")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
+        print ("game_rows " + str(game_rows))
+        cursor.close()
     return game_rows[0]
 
 def user_based_recommendations(request):
@@ -172,15 +181,19 @@ def user_based_recommendations(request):
 
 def game_based_recommandations(request, game_id):
     # create_table_game_category_vector() Create Game_Category_Vectors that contains the item based game category vectors
-    game_category_data = get_game_category_vector()
+    game_category_data = get_game_category_vectors()
     # print (user_category_data.shape)
     print("game_category_data" + str(game_category_data))
     game_data_nn = NearestNeighbors(n_neighbors=5)
     game_data_nn.fit(game_category_data)
     similar_games_id = game_data_nn.kneighbors([get_game_category_vector_recommendations(game_id)], return_distance=False)
+    print ("similar_games_id" + str(similar_games_id[0]))
     similar_games_suggestions = []
-    for game in similar_games_id:
+    for game in similar_games_id[0]:
         print (game)
-        similar_games_suggestions = np.vstack([similar_games_suggestions, get_game_sql(game)])
+        if not len(similar_games_suggestions):
+            similar_games_suggestions = get_game_sql(game)
+        else:
+            similar_games_suggestions = np.vstack([similar_games_suggestions, get_game_sql(game)])
     args = {"similar_games_suggestions": similar_games_suggestions}
     return render(request, "accounts/recommendations.html", args)
