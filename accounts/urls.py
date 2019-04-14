@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from . import views
+from . import recommendations
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
@@ -9,11 +10,12 @@ urlpatterns = [
     url('register/', views.register, name = "register"),
     url('search/', views.search, name = "search"),
     url('about/', views.about, name = 'about'),
-    url('nearby_players/', views.wishlist_owned_finder, name = 'findnearby'),
+    url(r'^game_based_recommandations/(?P<game_id>[0-9]+)$', recommendations.game_based_recommandations, name="game_based_recommandations"),
+    url('user_based_recommendations/', recommendations.user_based_recommendations, name="user_based_recommendations"),
     url(r'^random/$', views.get_random_game, name="random"),
     url(r'^profile/$',views.view_profile, name ="view_profile"),
     url(r'^profile/remove_wishlist/(?P<game_id>[0-9]+)$',views.remove_from_wishlist, name ="remove_from_wishlist"),
     url(r'^profile/remove_ownedlist/(?P<game_id>[0-9]+)$',views.remove_from_ownedlist, name ="remove_from_ownedlist"),
-    url(r'^profile/edit/$',views.edit_profile, name ="edit_profile")
+    url(r'^profile/edit/$',views.edit_profile, name ="edit_profile"),
 ]
     #url(r'^login/$', loginView, {{'template_name':'accounts/login.html'}})
