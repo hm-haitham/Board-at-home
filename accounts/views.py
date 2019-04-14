@@ -41,6 +41,7 @@ def get_relation_sql(game_id):
         game_rows = dictfetchall(cursor)
     return game_rows[0]
 
+<<<<<<< HEAD
 
 
 #Get the first name, zip code, and email of people  who own a game on your Wishlist
@@ -60,6 +61,8 @@ def find_nearby_players(request):
     return render(request, "accounts/nearby_players.html",result)
 
 
+=======
+>>>>>>> 8f608b550b803c225f933fccd76ce6ed33bd3f4e
 # Remove the names of the Games in wishlist from database
 def remove_from_wishlist(request, game_id):
     with connection.cursor() as cursor:
@@ -132,9 +135,9 @@ def register(request):
         return render(request,'accounts/reg_form.html', args)
 
 
-def search_game_sql(name,category,players):
+def search_game_sql(name,category):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players = " + str(players) + ";")
+        cursor.execute("SELECT * FROM games WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%';")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows
 
@@ -142,22 +145,12 @@ def search(request):
     if request.method=='POST':
         srch = request.POST['srh']
         srch2 = request.POST['srh2']
-        srch3 = request.POST['srh3']
-        if srch3:
-            if (srch or srch2):
-                games = search_game_sql(srch,srch2,srch3)
-                if games:
-                    return render(request, "accounts/Search_Page.html", {'games': games})
-            else:
-                return HttpResponseRedirect('/accounts/search/')
+        if (srch or srch2):
+            games = search_game_sql(srch,srch2)
+            if games:
+                return render(request, "accounts/Search_Page.html", {'games': games})
         else:
-            if (srch or srch2):
-                games = search_game_sql(srch,srch2,'Min_players')
-                if games:
-                    return render(request, "accounts/Search_Page.html", {'games': games})
-            else:
-                return HttpResponseRedirect('/accounts/search/')
-
+            return HttpResponseRedirect('/accounts/search/')
     return render(request, 'accounts/Search_Page.html')
 
 
@@ -190,7 +183,10 @@ def edit_profile(request):
 def about(request):
     return render(request, "accounts/about.html")
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8f608b550b803c225f933fccd76ce6ed33bd3f4e
 def get_random_game(request):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM games ;")
