@@ -53,7 +53,8 @@ def wishlist_owned_finder(request):
         NATURAL JOIN \
         (((SELECT user_id as id, Game_ID FROM Relation WHERE Owned=TRUE AND user_id !=" + str(request.user.id) + ") B \
         NATURAL JOIN auth_user ) C \
-        NATURAL JOIN ( SELECT zipcode as owner_zipcode, user_id AS id FROM accounts_userprofile) D) E")
+        NATURAL JOIN ( SELECT zipcode as owner_zipcode, user_id AS id FROM accounts_userprofile) D) E \
+        WHERE (substr(cast(wisher_zipcode as varchar),1,3)) = (substr(cast(owner_zipcode as varchar),1,3)) ")
 
         result = dictfetchall(cursor)
     return result
