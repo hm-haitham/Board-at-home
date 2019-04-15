@@ -47,9 +47,14 @@ def get_relation_sql(game_id):
 def wishlist_owned_finder(request):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * \
-        FROM ((SELECT user_id AS wisher_id, Game_ID FROM Relation WHERE Wishlist = TRUE AND user_id=" + str(request.user.id) + ") O NATURAL JOIN (SELECT Game_ID, name from games) games) A \
+        FROM ((SELECT User_id AS wisher_id, Game_ID FROM Relation WHERE Wishlist = TRUE AND user_id=" + str(request.user.id) + ") O \
+        NATURAL JOIN (SELECT user_id AS wisher_id, zipcode as wisher_zipcode FROM accounts_userprofile) E ) \
+        NATURAL JOIN  (SELECT name, Game_ID FROM games) \
         NATURAL JOIN \
-        (((SELECT user_id as id, Game_ID FROM Relation WHERE Owned=TRUE AND user_id !=" + str(request.user.id) + ") B NATURAL JOIN auth_user ) C NATURAL JOIN ( SELECT zipcode as owner_zipcode, user_id AS id FROM accounts_userprofile) D) E")
+        (((SELECT user_id as id, Game_ID FROM Relation WHERE Owned=TRUE AND user_id !=" + str(request.user.id) + ") B \
+        NATURAL JOIN auth_user ) C \
+        NATURAL JOIN ( SELECT zipcode as owner_zipcode, user_id AS id FROM accounts_userprofile) D) E")
+
         result = dictfetchall(cursor)
     return result
 
