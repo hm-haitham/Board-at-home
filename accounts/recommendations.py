@@ -180,17 +180,18 @@ def user_based_recommendations(request):
 
 
 def game_based_recommandations(request, game_id):
-    # create_table_game_category_vector() Create Game_Category_Vectors that contains the item based game category vectors
+    create_table_game_category_vector() #Create Game_Category_Vectors that contains the item based game category vectors
     game_category_data = get_game_category_vectors()
     # print (user_category_data.shape)
     print("game_category_data" + str(game_category_data))
     game_data_nn = NearestNeighbors(n_neighbors=5)
     game_data_nn.fit(game_category_data)
-    similar_games_id = game_data_nn.kneighbors([get_game_category_vector_recommendations(game_id)], return_distance=False)
-    print ("similar_games_id" + str(similar_games_id[0]))
+    similar_games_id = game_data_nn.kneighbors([get_game_category_vector_recommendations(game_id)],
+                                               return_distance=False)
+    print("similar_games_id" + str(similar_games_id[0]))
     similar_games_suggestions = []
     for game in similar_games_id[0]:
-        print (game)
+        print(game)
         if not len(similar_games_suggestions):
             similar_games_suggestions = get_game_sql(game)
         else:
