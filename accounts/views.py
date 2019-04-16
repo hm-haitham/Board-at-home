@@ -140,7 +140,7 @@ def register(request):
 
 def search_game_sql(name,category,min_players, owned):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM ((SELECT * from games) g NATURAL JOIN (SELECT * FROM Relation) R) WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players = " + str(min_players) + " AND Owned = " + str(owned) + ";")
+        cursor.execute("SELECT * FROM ((SELECT * from games) Left JOIN (SELECT Game_ID, Owned FROM Relation)) WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players = " + str(min_players) + " AND Owned is " + str(owned) + ";")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows
 
@@ -149,8 +149,9 @@ def search(request):
         srch = request.POST['srh']
         srch2 = request.POST['srh2']
         srch3 = request.POST['srh3']
-        srch4 = request.POST.get('srch4', "False")
+        srch4 = request.POST.get('srch4', "NULL")
         srch5 = request.POST.get('srch5', "Max_players")
+        srch6 = request.POST.get('srch6', "99")
         if srch3:
             if (srch or srch2 or srch3):
                 games = search_game_sql(srch,srch2,srch3,srch4)
