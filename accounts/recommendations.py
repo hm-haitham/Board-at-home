@@ -144,7 +144,7 @@ def get_games_user_based_suggestions(user_id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM games " +
                        "WHERE Game_ID in (SELECT Game_ID From Relation Where User_ID =" + str(user_id) + ");")
-        data = dictfetchall(cursor)[0]
+        data = dictfetchall(cursor)
         cursor.close()
         return data
 
@@ -157,6 +157,7 @@ def get_game_sql(game_id):
     return game_rows[0]
 
 def user_based_recommendations(request):
+    # create_table_game_category_vector()
     user_category_data, user_ids = np.split(get_all_users_category_vectors(), [-1], axis=1)
     user_ids = [j for i in user_ids for j in i]
     print ("user_category_data " + str(user_category_data))
@@ -174,8 +175,7 @@ def user_based_recommendations(request):
             similar_user_suggestions = get_games_user_based_suggestions(user)
         else:
             similar_user_suggestions = np.vstack([similar_user_suggestions, get_games_user_based_suggestions(user)])
-    args = {"similar_user_suggestions": similar_user_suggestions}
-    return render(request, "accounts/recommendations.html", args)
+    return similar_user_suggestions
 
 
 
@@ -196,5 +196,6 @@ def game_based_recommandations(request, game_id):
             similar_games_suggestions = get_game_sql(game)
         else:
             similar_games_suggestions = np.vstack([similar_games_suggestions, get_game_sql(game)])
-    args = {"similar_games_suggestions": similar_games_suggestions}
-    return render(request, "accounts/recommendations.html", args)
+    args = {'user': request.user, 'wishlist_games': views.view_wishlist(request),
+            'ownedlist_games': views.view_ownedlist(request), "similar_games_suggestions": similar_games_suggestions}
+    return render(request, "accounts/profile.html", args)
