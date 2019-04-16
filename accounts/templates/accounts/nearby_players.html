@@ -15,7 +15,7 @@
      <div class ="col-sm-12">
         <ul class="nav nav-pills flex-column">
           <li class="nav-item">
-              <h2>Nearby People who own games you want to play</h2>
+              <h2>Nearby Players</h2>
               {% if result %}
                   <u1 style="margin-bottom:8">
                       {% for Tuple in result %}
@@ -32,7 +32,7 @@
                       {% endfor %}
                   </u1>
               {% else %}
-                  <h3>Add to your wishlist to find new friends</h3>
+                  <h3>Either no one nearby owns wished games, or you have no games in wishlist</h3>
               {% endif %}
           </li>
 
