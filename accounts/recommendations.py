@@ -110,17 +110,6 @@ def get_game_category_vectors():
             game_category_vectors.append(np.array(row))
         return np.array(game_category_vectors)
 
-# # Given index of category return name
-# def get_name_from_index(index):
-#     if 0 <= index <= 82:
-#         category_mapping = get_category_mapping()
-#         for k in category_mapping:
-#             if category_mapping[k] == index:
-#                 return k
-#     else:
-#         print ("Invalid index")
-#         raise Exception()
-
 def get_all_users_category_vectors():
     with connection.cursor() as cursor:
         cursor.execute("SELECT DISTINCT User_ID FROM Relation WHERE Score NOT NULL;")
@@ -144,7 +133,7 @@ def get_games_user_based_suggestions(user_id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM games " +
                        "WHERE Game_ID in (SELECT Game_ID From Relation Where User_ID =" + str(user_id) + ");")
-        data = dictfetchall(cursor)[0]
+        data = dictfetchall(cursor)
         cursor.close()
         return data
 
@@ -157,6 +146,7 @@ def get_game_sql(game_id):
     return game_rows[0]
 
 def user_based_recommendations(request):
+    # create_table_game_category_vector()
     user_category_data, user_ids = np.split(get_all_users_category_vectors(), [-1], axis=1)
     user_ids = [j for i in user_ids for j in i]
     print ("user_category_data " + str(user_category_data))
@@ -174,27 +164,28 @@ def user_based_recommendations(request):
             similar_user_suggestions = get_games_user_based_suggestions(user)
         else:
             similar_user_suggestions = np.vstack([similar_user_suggestions, get_games_user_based_suggestions(user)])
-    args = {"similar_user_suggestions": similar_user_suggestions}
-    return render(request, "accounts/recommendations.html", args)
+    return similar_user_suggestions
 
+def get_game_ids(user_id):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT Game_ID From Relation Where User_ID =" + str(user_id) + ";")
+        game_ids = [e[0] for e in cursor.fetchall()]
+        print (game_ids)
+        cursor.close()
+        return game_ids
 
-
-def game_based_recommandations(request, game_id):
-    create_table_game_category_vector() #Create Game_Category_Vectors that contains the item based game category vectors
+def game_based_recommandations(request):
+    #create_table_game_category_vector() #Create Game_Category_Vectors that contains the item based game category vectors
+    game_ids = get_game_ids(request.user.id)
     game_category_data = get_game_category_vectors()
-    # print (user_category_data.shape)
-    print("game_category_data" + str(game_category_data))
     game_data_nn = NearestNeighbors(n_neighbors=5)
     game_data_nn.fit(game_category_data)
-    similar_games_id = game_data_nn.kneighbors([get_game_category_vector_recommendations(game_id)],
-                                               return_distance=False)
-    print("similar_games_id" + str(similar_games_id[0]))
     similar_games_suggestions = []
-    for game in similar_games_id[0]:
-        print(game)
-        if not len(similar_games_suggestions):
-            similar_games_suggestions = get_game_sql(game)
-        else:
-            similar_games_suggestions = np.vstack([similar_games_suggestions, get_game_sql(game)])
+    for game_id in game_ids:
+        similar_games_id = game_data_nn.kneighbors([get_game_category_vector_recommendations(game_id)],
+                                                   return_distance=False)
+        print("similar_games_id" + str(similar_games_id[0]))
+        for game in similar_games_id[0]:
+                similar_games_suggestions.append(get_game_sql(game))
     args = {"similar_games_suggestions": similar_games_suggestions}
     return render(request, "accounts/recommendations.html", args)

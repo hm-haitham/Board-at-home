@@ -59,6 +59,16 @@
             {% endif %}
         </li>
         <li class="nav-item">
+            <a class="nav-link active" href="#">Similar users also liked</a>
+                <u1 style="margin-bottom:8">
+                    {% for game in user_based_recommendations %}
+                        <li>
+                            <a href="/games/{{ game.Game_ID }}/"> {{ game.Name }} </a>
+                        </li>
+                    {% endfor %}
+                </u1>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'findnearby' %}">Find Nearby Players</a>
         </li>
         <li class="nav-item">

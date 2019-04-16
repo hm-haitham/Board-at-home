@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>You may also like:</title>
+
+{% endblock %}
+
+{% block body %}
+  <div class="container">
+      <h1>You may also like:</h1>
+            {% if similar_games_suggestions %}
+                <u1 style="margin-bottom:10">
+                    {% for game in similar_games_suggestions %}
+                    <li><a href="/games/{{ game.Game_ID }}/"> {{ game.Name }} </a></li>
+                    {% endfor %}
+                </u1>
+            {% else %}
+                <h3>No recommended games</h3>
+            {% endif %}
+    </div>
+    {% endblock %}
