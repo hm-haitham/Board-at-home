@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserChangeForm
 from django.db import connection
 from django.http import HttpResponseRedirect
 import random
+from . import recommendations
+
 
 
 def dictfetchall(cursor):
@@ -173,7 +175,10 @@ def view_profile(request):
     ownedlist_games = []
     for e in ownedlist:
         ownedlist_games.append([get_game_sql(e["Game_ID"]), e["Score"]])
-    args = {'user': request.user, 'wishlist_games': wishlist_games, 'ownedlist_games': ownedlist_games}
+    user_based_recommendations = recommendations.user_based_recommendations(request)
+    print ("user_based_recommendations " + str(user_based_recommendations) )
+    args = {'user': request.user, 'wishlist_games': wishlist_games,
+            'ownedlist_games': ownedlist_games, 'user_based_recommendations': user_based_recommendations}
     return render(request, "accounts/profile.html", args)
 
 
