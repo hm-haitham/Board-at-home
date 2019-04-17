@@ -138,9 +138,9 @@ def register(request):
         return render(request,'accounts/reg_form.html', args)
 
 
-def search_game_sql(name,category,min_players,owned):
+def search_game_sql(request, name,category,min_players,owned):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM ((SELECT Game_ID, Owned FROM Relation) Left JOIN (SELECT * from games)) WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players= " + str(min_players) + " AND owned is " + str(owned)  + " ;")
+        cursor.execute("SELECT * FROM ((SELECT * FROM Relation) NATURAL JOIN (SELECT * from games)) WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players= " + str(min_players) + " AND owned is "  + str(owned)  + " and User_ID=" + str(request.user.id) + ";")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows
 
@@ -152,12 +152,12 @@ def search(request):
         srch4 = request.POST.get('srh4', "NULL")
         if (srch4=="on"):
             srch4="1"
-        # srch5 = request.POST.get('srh5', "NULL")
+        # srch5 = request.POST.get('srh5', "Max_Players")
         # srch6 = request.POST.get('srh6', "99")
         if srch3:
             if (srch or srch2 or srch3):
                 print(srch4)
-                games = search_game_sql(srch,srch2,srch3,srch4)
+                games = search_game_sql(request, srch,srch2,srch3,srch4)
                 if games:
                     return render(request, "accounts/Search_Page.html", {'games': games})
             else:
@@ -165,7 +165,7 @@ def search(request):
         else:
             if (srch or srch2):
                 print(srch4)
-                games = search_game_sql(srch,srch2,'Min_players',srch4)
+                games = search_game_sql(request, srch,srch2,'Min_players',srch4)
                 if games:
                     return render(request, "accounts/Search_Page.html", {'games': games})
             else:
