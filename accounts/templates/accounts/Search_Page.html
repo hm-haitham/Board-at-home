@@ -3,6 +3,8 @@
 
 {% block body %}
 
+
+
 <div class="container">
 <h1> Search Game Information</h1>
 <form method="post" action="/accounts/search/">
@@ -17,14 +19,21 @@
       <div class="col-lg-4">
     <input type="text" name="srh3" class="form-control" placeholder="Enter Minimum Number of players">
 	</div>
-	{% if user.is_authenticated %}
-		<div class="col-lg-4">
-    	<input type="text" name="srh4" class="form-control" placeholder="Owned">
-      	</div>
-    {% endif %}
-    <div class="col-lg-4">
+
+<!--     <div class="col-lg-4">
     <input type="text" name="srh5" class="form-control" placeholder="Enter Max Number of players">
 	</div>
+
+    <div class="col-lg-4">
+    <input type="text" name="srh6" class="form-control" placeholder="Enter Minimum Number of age">
+	</div> -->
+	{% if user.is_authenticated %}
+
+    <div class="checkbox">
+      <label><input type="checkbox" name="srh4"> Owned</label>
+    </div>
+
+    {% endif %}
       </div>
 			<label class="col-lg-2">
 				<button type="submit" class="btn btn-danger">Search</button>
@@ -60,6 +69,14 @@
 
       <tr>
         <td> Minimum Number of Players: {{ game.Min_players }}</td>
+      </tr>
+
+      <tr>
+        <td> Maximum Number of Players: {{ game.Max_players }}</td>
+      </tr>
+
+      <tr>
+        <td> Minimum Number of Age: {{ game.Min_age }}</td>
       </tr>
 
 			</table>
