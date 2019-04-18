@@ -138,9 +138,11 @@ def register(request):
         return render(request,'accounts/reg_form.html', args)
 
 
-def search_game_sql(request, name,category,min_players,owned):
+def search_game_sql(name,category,min_players,owned,user_id):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM ((SELECT * FROM Relation) NATURAL JOIN (SELECT * from games)) WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players= " + str(min_players) + " AND owned is "  + str(owned)  + " and User_ID=" + str(request.user.id) + ";")
+        if (owned=="owned"):
+            user_id="user_id"
+        cursor.execute("SELECT DISTINCT g.Game_ID, Description, Max_players, Min_players, Min_age, name, Playing_time, Year_published, Boardgame_artist, Category, Designer, Mechanics, Publisher, Rating FROM ((SELECT * from games) g Left JOIN (SELECT User_ID, Game_ID, owned FROM Relation) r on g.Game_ID=r.Game_ID) WHERE Name LIKE '%" + str(name) + "%' AND Category LIKE '%" + str(category) + "%' AND Min_players= " + str(min_players) + " AND owned is "  + str(owned) + " AND User_ID is "  + str(user_id)  + ";")
         game_rows = dictfetchall(cursor)	#[{'Game_ID': 1, 'Description': "...", Image:"...", ...}, {'Game_ID': 2, 'Description': "...", Image:"..."}...]
     return game_rows
 
@@ -149,25 +151,30 @@ def search(request):
         srch = request.POST['srh']
         srch2 = request.POST['srh2']
         srch3 = request.POST['srh3']
-        srch4 = request.POST.get('srh4', "NULL")
+        if (srch3):
+            srch3=srch3
+        else:
+            srch3="Min_players"
+        srch4 = request.POST.get('srh4', "owned")
         if (srch4=="on"):
             srch4="1"
+        if any(char.isdigit() for char in str(request.user.id)) :
+            srch7 = str(request.user.id)
+        else:
+            srch7 = "user_id"        
         # srch5 = request.POST.get('srh5', "Max_Players")
         # srch6 = request.POST.get('srh6', "99")
-        if srch3:
-            if (srch or srch2 or srch3):
-                print(srch4)
-                games = search_game_sql(request, srch,srch2,srch3,srch4)
+        if (srch4!="1"):
+            if (srch or srch2 or (srch3!="Min_players")):
+                games = search_game_sql(srch,srch2,srch3,srch4,srch7)
                 if games:
                     return render(request, "accounts/Search_Page.html", {'games': games})
             else:
                 return HttpResponseRedirect('/accounts/search/')
         else:
-            if (srch or srch2):
-                print(srch4)
-                games = search_game_sql(request, srch,srch2,'Min_players',srch4)
-                if games:
-                    return render(request, "accounts/Search_Page.html", {'games': games})
+            games = search_game_sql(srch,srch2,srch3,srch4,srch7)
+            if games:
+                return render(request, "accounts/Search_Page.html", {'games': games})
             else:
                 return HttpResponseRedirect('/accounts/search/')  
     return render(request, 'accounts/Search_Page.html')
